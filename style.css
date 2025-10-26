@@ -1,0 +1,2608 @@
+:root {
+    --gold: rgb(179, 161, 98);
+    --bg: #0a0a0a;
+    --shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+@font-face {
+    font-family: "Saudagar";
+    src: url("font/saudagar.regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+html,
+body {
+    overflow-x: hidden;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    margin: 0;
+    padding: 0;
+}
+
+/* Kunci scrolling saat halaman “terkunci” */
+html.lock-scroll,
+body.lock-scroll {
+    overflow: hidden !important;
+    height: 100%; /* cegah bounce */
+}
+
+/* (opsional) untuk hero full screen, pakai dvh supaya stabil di mobile */
+@supports (height: 100dvh) {
+    #wedding-title {
+        height: 100dvh;
+    }
+}
+
+html {
+    scrollbar-width: thin; /* thin / auto / none */
+    scrollbar-color: var(--gold) rgba(255, 255, 255, 0.12); /* thumb, track */
+}
+
+/* Chrome/Edge/Safari (WebKit/Blink) */
+html::-webkit-scrollbar {
+    width: 10px; /* ⬅️ vertikal = width */
+}
+html::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+}
+html::-webkit-scrollbar-thumb {
+    background: var(--gold);
+    border-radius: 999px;
+    border: 2px solid rgba(0, 0, 0, 0.25); /* bikin “padding” */
+}
+html::-webkit-scrollbar-thumb:hover {
+    background: #c7b378; /* gold sedikit lebih terang */
+}
+
+body {
+    font-size: 1.2rem;
+    font-family: "Work Sans", sans-serif;
+}
+
+/* === UNIVERSAL FULLSCREEN SECTION FIX === */
+section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh; /* fallback untuk desktop & browser lama */
+    min-height: 100svh; /* stabil di HP dengan UI bar */
+    min-height: 100dvh; /* browser modern (dynamic) */
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* ========== BASE ========== */
+.landing-page {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* 🌆 Dua lapisan background */
+    background-image: url("src/img/assets/desktopView.png"),
+        /* border frame (di atas) */
+            url("src/img/weddingPicture//bgLanding.webp"); /* foto latar belakang (di bawah) */
+
+    background-repeat: no-repeat, no-repeat;
+    background-size: contain, cover; /* border = contain, foto = cover */
+    background-position: center, center;
+    overflow: hidden;
+}
+#landing-page {
+    position: relative;
+    min-height: 100svh; /* pakai small viewport height */
+    margin: 0;
+    padding: 0;
+    top: 0;
+    inset: 0;
+    overflow: hidden;
+}
+
+.landing-page::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4); /* ubah opacity sesuai selera */
+    z-index: 1;
+}
+
+.btn-enter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    background: #b3a162; /* emas */
+    color: #101010;
+    text-decoration: none;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    font-size: clamp(0.95rem, 2.2vw, 1rem);
+
+    padding: 0.9rem 1.4rem;
+    border-radius: 999px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.btn-enter:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+}
+
+.btn-enter:active {
+    transform: translateY(0);
+}
+
+.btn-enter:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(179, 161, 98, 0.35),
+        0 8px 22px rgba(0, 0, 0, 0.22);
+}
+
+/* animasi panah kecil */
+.btn-enter::after {
+    content: "";
+    font-size: 1.1em;
+    line-height: 1;
+    transform: translateX(0);
+    transition: transform 0.15s ease;
+}
+.btn-enter:hover::after {
+    transform: translateX(2px);
+}
+
+/* (opsional) versi di hero: center + jarak dari bawah */
+#wedding-title .btn-enter {
+    margin-top: 1rem; /* kalau ditaruh di blok teks */
+    text-shadow: none; /* biar teks tombol tetap flat */
+}
+@media (max-width: 768px) {
+    .btn-enter {
+        width: auto;
+        padding: 0.85rem 1.2rem;
+    }
+}
+.safe-area {
+    position: relative;
+    z-index: 2;
+}
+
+.myFont {
+    font-family: "Saudagar", sans-serif !important;
+    font-weight: bold;
+}
+
+/* default: jangan pecah baris (desktop) */
+.br-mobile {
+    display: none;
+}
+/* mobile: pecah baris setelah "Undangan" */
+@media (max-width: 768px) {
+    .br-mobile {
+        display: inline;
+    }
+}
+
+/* optional: jamin judul tetap 1 baris di desktop meski kontainernya sempit */
+@media (max-width: 768px) {
+    .myFont {
+        white-space: nowrap;
+        font-size: 1.25rem;
+    }
+}
+
+/* AREA AMAN DI DALAM FRAME */
+.safe-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding-top: 12vh;
+    padding-bottom: 10vh;
+}
+
+.guest-ornament {
+    width: 80px;
+    height: auto;
+    margin-bottom: 1.5rem;
+}
+
+.guest-box {
+    background-color: rgba(179, 161, 98, 0.5);
+    color: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    width: 55vw;
+    max-width: 600px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.guest-box p {
+    margin: 0.3rem 0;
+    font-size: 1.4rem;
+}
+
+.guest-box .guest-name {
+    margin: 1rem 0;
+    font-family: "Patua One", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 2rem;
+}
+
+/* ========== TABLET (768–1024px) ========== */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .landing-page {
+        /* 🔁 Dua lapisan background untuk mobile */
+        background-image: url("src/img/assets/mobileView.png"),
+            /* border versi mobile */
+                url("src/img/weddingPicture/bgLanding.webp"); /* foto latar belakang mobile */
+
+        background-repeat: no-repeat, no-repeat;
+        background-size: contain, cover; /* border tetap proporsional, foto isi penuh */
+        background-position: center, center;
+    }
+
+    .safe-area {
+        padding-top: 14vh;
+        padding-bottom: 12vh;
+    }
+
+    .guest-ornament {
+        width: 60px;
+        margin-bottom: 1.2rem;
+    }
+
+    .guest-box {
+        width: 40vw;
+        max-width: 500px;
+        padding: 1.8rem 1.5rem;
+    }
+
+    .guest-box p {
+        font-size: 1.2rem;
+    }
+
+    .guest-box .guest-name {
+        font-size: 1.7rem;
+    }
+}
+
+/* ========== HANDPHONE (≤767px) ========== */
+@media (max-width: 767px) {
+    .landing-page {
+        /* 🔁 Dua lapisan background untuk mobile */
+        background-image: url("src/img/assets/mobileView.png"),
+            /* border versi mobile */
+                url("src/img/weddingPicture/bgLanding.webp"); /* foto latar belakang mobile */
+
+        background-repeat: no-repeat, no-repeat;
+        background-size: contain, cover; /* border tetap proporsional, foto isi penuh */
+        background-position: center, center;
+    }
+
+    .safe-area {
+        padding-top: 22vh; /* aman dari ornamen atas */
+        padding-bottom: 20vh; /* aman dari bawah */
+    }
+
+    .guest-ornament {
+        width: 60px;
+        margin-bottom: 1rem;
+    }
+
+    .guest-box {
+        padding: 1.5rem 1rem;
+        border-radius: 10px;
+        margin-top: 75px;
+    }
+
+    .guest-box p {
+        font-size: 1.1rem;
+    }
+
+    .guest-box .guest-name {
+        font-size: 1.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .guest-box .guest-name {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .wedding-container {
+        padding: 1.5rem 1rem 0rem 1rem !important;
+    }
+}
+
+/* ========== HANDPHONE SUPER PANJANG (20:9 ke atas) ========== */
+@media (max-aspect-ratio: 9/16) {
+    .safe-area {
+        padding-top: 24vh;
+        padding-bottom: 22vh;
+    }
+
+    .guest-ornament {
+        width: 60px;
+        margin-bottom: 1rem;
+    }
+}
+
+/* ===== mepandes Section ===== */
+.mepandes-section {
+    position: relative;
+    background: url("src/img/mepandes/Latar.jpeg") center/cover no-repeat;
+    background-blend-mode: multiply;
+    color: #fff;
+    padding: clamp(48px, 8vh, 96px) 6vw;
+    scroll-margin-top: 64px; /* agar anchor rapi saat di-scroll dari nav */
+}
+
+.pm-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.pm-title {
+    font-family: "Playwrite CA", cursive;
+    font-size: clamp(2rem, 4.5vw, 2.6rem);
+    color: var(--gold);
+    text-align: center;
+    margin: 0 0 1.25rem;
+}
+
+/* Kartu profil */
+.pm-card {
+    display: flex;
+    align-items: stretch;
+    gap: clamp(16px, 2.5vw, 24px);
+    background-color: rgba(179, 161, 98, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: clamp(16px, 2.2vw, 24px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    backdrop-filter: saturate(120%) blur(2px);
+}
+
+.pm-card + .pm-card {
+    margin-top: clamp(16px, 2.6vw, 24px);
+}
+
+/* Foto */
+.pm-photo {
+    flex: 0 0 clamp(220px, 32vw, 420px); /* lebar blok foto */
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+}
+.pm-photo img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    aspect-ratio: 4 / 5; /* potret serbaguna; ganti sesuai fotomu */
+    object-fit: cover;
+    transform: scale(1.001); /* hindari hairline saat border-radius */
+}
+
+/* Info */
+.pm-info {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    justify-content: center;
+    text-align: left;
+}
+
+.pm-name {
+    margin: 0;
+    font-family: "Playwrite CA", cursive;
+    font-size: clamp(1.4rem, 3.8vw, 1.9rem);
+
+    letter-spacing: 0.3px;
+}
+
+.pm-role {
+    margin: 0;
+    font-weight: 600;
+    opacity: 0.95;
+}
+
+.pm-desc {
+    margin: 0.2rem 0 0;
+    line-height: 1.65;
+    color: #f5f5f5;
+}
+
+.pm-meta {
+    margin: 0.3rem 0 0;
+    padding-left: 1.1rem;
+    line-height: 1.5;
+    color: #ddd;
+}
+.pm-meta li::marker {
+    color: var(--gold);
+}
+
+/* Reverse layout untuk mepandes ke-2 */
+.pm-card--reverse {
+    flex-direction: row;
+    text-align: left;
+}
+
+/* Tombol IG di dalam section mepandes */
+.pm-ig {
+    display: inline-flex; /* shrink-to-fit */
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    /* ukuran compact */
+    padding: 0.6rem 1rem;
+    font-size: clamp(0.9rem, 2.2vw, 1rem);
+
+    /* JANGAN melebar di desktop */
+    width: auto; /* <-- kunci */
+    max-width: 100%;
+    white-space: nowrap; /* hindari teks turun baris */
+    align-self: flex-start; /* kalau parent flex/ grid, tetap kiri */
+    margin-top: 0.35rem; /* jarak dari nama */
+}
+
+/* Ikon kecil rapi */
+.pm-ig i {
+    font-size: 1rem;
+    line-height: 1;
+}
+.pm-card--reverse .pm-info .pm-ig {
+    justify-self: end; /* jika .pm-info = grid */
+    margin-left: auto; /* jika .pm-info = flex/block */
+    align-self: auto; /* reset dari flex-start kalau ada */
+}
+
+/* Responsif */
+@media (max-width: 992px) {
+    .pm-photo {
+        flex-basis: clamp(200px, 40vw, 320px);
+    }
+}
+
+@media (max-width: 768px) {
+    .pm-card,
+    .pm-card--reverse {
+        flex-direction: column;
+    }
+    /* Foto di atas, teks di bawah untuk semua card */
+    .pm-card .pm-photo,
+    .pm-card--reverse .pm-photo {
+        order: -1;
+    }
+    .pm-card .pm-info,
+    .pm-card--reverse .pm-info {
+        order: 0;
+    }
+}
+
+/* Pastikan section jadi anchor posisi dan potong yang keluar */
+.mepandes-section {
+    position: relative;
+    overflow: hidden;
+    /* opsional: ubah path gambar cepat via custom properties */
+    --orn-flower: url("src/img/mepandes/Ornament-Tema-Bohemian-4.png");
+}
+
+/* Konten di atas ornament */
+.pm-container {
+    position: relative;
+    z-index: 2;
+}
+
+/* Ornament bunga 1 — pojok kanan atas */
+.mepandes-section::before {
+    content: "";
+    position: absolute;
+    top: -18px; /* geser sedikit keluar frame biar natural */
+    right: -46px;
+    width: clamp(400px, 22vw, 400px);
+    aspect-ratio: 1 / 1; /* jaga proporsi */
+    background: var(--orn-flower) no-repeat center / contain;
+    opacity: 0.95;
+    pointer-events: none; /* tidak menghalangi klik */
+    z-index: 1;
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.25));
+}
+
+/* Ornament bunga 2 — pojok kiri bawah */
+.mepandes-section::after {
+    content: "";
+    position: absolute;
+    bottom: -22px;
+    left: -46px;
+    width: clamp(400px, 22vw, 400px);
+    aspect-ratio: 1 / 1;
+    background: var(--orn-flower) no-repeat center / contain;
+    opacity: 0.95;
+    pointer-events: none;
+    z-index: 1;
+    transform: rotate(-180deg); /* opsional: sedikit miring biar hidup */
+    filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.28));
+}
+
+/* Responsif: kecilkan agar tidak menutupi konten */
+@media (max-width: 768px) {
+    .mepandes-section::before {
+        top: -18px; /* geser sedikit keluar frame biar natural */
+        right: -46px;
+        width: clamp(230px, 22vw, 400px);
+    }
+    .mepandes-section::after {
+        bottom: -22px;
+        left: -46px;
+        width: clamp(230px, 22vw, 400px);
+        transform: rotate(-180deg); /* opsional: sedikit miring biar hidup */
+    }
+}
+
+/* ========== SECTION WEDDING TITLE (FULL HEIGHT) ========== */
+#wedding-title {
+    position: relative;
+    height: 100svh; /* ✅ isi penuh tinggi layar */
+    width: 100%;
+    background-image: url("src/img/weddingPicture/mobileMode.webp");
+    background-size: cover;
+    background-position: center 35%;
+    background-repeat: no-repeat;
+    text-align: center;
+    overflow: hidden; /* potong elemen keluar */
+}
+
+/* 📱 TABLET & HANDPHONE */
+@media (max-width: 1024px) {
+    #wedding-title {
+        background-image: url("src/img/weddingPicture/mobileMode.webp");
+        background-size: cover;
+        background-position: center 65%;
+    }
+
+    .ornament-top img,
+    .ornament-bottom img {
+        width: 220px; /* ubah sesuai kebutuhan tablet */
+    }
+}
+
+/* ========== ORNAMENTS ========== */
+.ornament-top,
+.ornament-bottom {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.ornament-top {
+    top: 0;
+}
+
+.ornament-bottom {
+    bottom: 0;
+}
+
+.ornament-top img,
+.ornament-bottom img {
+    width: 650px;
+    height: auto;
+    display: block;
+    opacity: 0.9;
+}
+
+/* ========== TEKS DI TENGAH ========== */
+.wedding-text {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    padding: 2.2rem 2rem;
+    color: var(--gold);
+}
+
+.wedding-container {
+    padding: 5rem 1rem;
+    border-radius: 10px;
+}
+
+.wedding-text .subtitle {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    font-family: "Patua One", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.wedding-text .bride-groom {
+    font-family: "Playwrite CA", cursive;
+    font-size: 3rem;
+
+    margin: 0.5rem 0;
+}
+
+.wedding-text .and-symbol {
+    font-size: 2.5rem;
+
+    margin: 0.3rem 0;
+    font-family: "Cormorant Garamond", serif;
+}
+
+/* Tombol Instagram – match style btn lainnya (emas, pill) */
+.btn-ig {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    background: #b3a162; /* emas */
+    color: #101010; /* teks gelap */
+    text-decoration: none;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    font-size: clamp(0.9rem, 2.2vw, 1rem);
+
+    padding: 0.7rem 1.1rem;
+    border-radius: 999px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    margin-top: 0.7rem;
+}
+
+.btn-ig:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+}
+
+.btn-ig:active {
+    transform: translateY(0);
+}
+.btn-ig:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(179, 161, 98, 0.35),
+        0 8px 22px rgba(0, 0, 0, 0.22);
+}
+
+/* Ikon Instagram (ikut warna teks tombol via currentColor) */
+.btn-ig .ig-icon {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    flex: 0 0 18px;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (max-width: 768px) {
+    .ornament-top img,
+    .ornament-bottom img {
+        width: 380px;
+    }
+    #wedding-title {
+        background-image: url("src/img/weddingPicture/mobileMode.webp");
+        background-size: cover;
+        background-position: center 100%;
+    }
+
+    .wedding-text .subtitle {
+        font-size: 2.5rem;
+    }
+
+    .wedding-text .bride-groom {
+        font-size: 2.2rem;
+    }
+
+    .wedding-text .and-symbol {
+        font-size: 2rem;
+    }
+}
+
+/* ========== HANDPHONE SUPER PANJANG (20:9 KE ATAS) ========== */
+@media (max-aspect-ratio: 9/16) {
+    .wedding-text {
+        padding-top: 10vh;
+        padding-bottom: 5vh;
+    }
+}
+
+/* ✅ Pastikan ornament menempel ke tepi section */
+.ornament-top,
+.ornament-bottom {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.ornament-top {
+    top: 0; /* mepet atas */
+}
+
+.ornament-bottom {
+    bottom: 0; /* mepet bawah */
+}
+
+/* Doa Section */
+#doa {
+    position: relative; /* penting agar pseudo-elem bisa diposisikan */
+    background: #fff;
+    height: 100svh;
+    overflow: hidden; /* biar ornamen tidak keluar area section */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* posisikan isi di bawah */
+    align-items: center; /* tetap center secara horizontal */
+    text-align: center;
+}
+
+/* 🪷 ORNAMENT EMPAT POJOK DOA SECTION */
+.doa-ornaments {
+    position: absolute;
+    inset: 0; /* isi penuh section */
+    z-index: 1; /* di bawah isi utama tapi di atas background */
+    pointer-events: none; /* biar ga ganggu klik elemen di bawah */
+}
+
+.doa-ornaments .ornament {
+    position: absolute;
+    width: 180px; /* 🔧 ubah sesuai kebutuhan desktop */
+    opacity: 0.8;
+}
+
+/* POSISI */
+.doa-ornaments .bottom-left {
+    bottom: 0;
+    left: 0;
+    transform: scaleY(-1); /* mirror vertical */
+}
+
+.doa-ornaments .bottom-right {
+    bottom: 0;
+    right: 0;
+    transform: scale(-1, -1); /* mirror diagonal */
+}
+/* 🪷 Jika ingin ornamen keluar dari canvas (offset keluar section) */
+.doa-ornaments .bottom-left {
+    bottom: -60px; /* keluar ke bawah */
+    left: -60px;
+}
+
+.doa-ornaments .bottom-right {
+    bottom: -60px;
+    right: -60px;
+}
+
+.justify-doa-text {
+    text-align: justify !important;
+}
+
+/* ✨ Animasi Rotasi Halus */
+@keyframes spin-slow {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Terapkan ke semua ornament */
+.doa-ornaments .ornament {
+    animation: spin-slow 15s linear infinite; /* 40s bisa kamu ubah kecepatannya */
+    transform-origin: center; /* rotasi di tengah gambar */
+}
+
+/* ===== STYLE KHUSUS KUTIPAN VEDA ===== */
+.veda-verse {
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-top: 2rem;
+    color: #3e3d3d;
+}
+
+.veda-title {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    color: #b3a162; /* warna gold lembut */
+    font-weight: 600;
+    font-family: "Playfair Display", serif;
+}
+
+.veda-title i {
+    margin-right: 8px;
+    color: #b3a162; /* icon sama warna gold */
+}
+
+.veda-meaning {
+    margin-top: 0.8rem;
+    font-size: 1rem;
+    color: #1c1a19;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.title-doa {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000; /* warna gold lembut */
+    margin-bottom: 1rem;
+    font-family: "Playfair Display", serif;
+}
+
+.title-omSwastyastu {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #b3a162; /* warna gold lembut */
+    margin-bottom: 1rem;
+    font-family: "Playwrite CA", cursive;
+    margin: 2rem 0;
+}
+
+.title-omShanti {
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #b3a162; /* warna gold lembut */
+    margin-bottom: 1rem;
+    font-family: "Playwrite CA", cursive;
+    margin: 2rem 0;
+}
+
+/* 🖼️ SECTION Copule */
+.couple-section {
+    position: relative;
+    height: 100vh; /* ⬅️ fix utama */
+    background: url("src/img/weddingPicture/groomBride.webp") center / cover
+        no-repeat;
+    color: #fff;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end; /* supaya isi di bawah */
+}
+
+.person-image {
+    display: none; /* hide foto per orang di desktop */
+}
+
+/* 🌒 GRADIENT BAYANGAN BAWAH */
+.couple-section .overlay-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 60%,
+        rgba(0, 0, 0, 0.85)
+    );
+    z-index: 1;
+}
+
+/* 📦 KONTEN UTAMA */
+.couple-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 100%;
+    padding: 0 8vw 6vh;
+    z-index: 2;
+    font-family: "Patua One", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* 👰🤵 MASING-MASING DIV */
+.person {
+    width: 45%;
+    text-align: center;
+}
+
+/* ✨ STYLING TEKS */
+.nickname {
+    font-family: "Playwrite CA", cursive;
+    font-size: 2.8rem;
+    color: #b3a162;
+    margin-bottom: 0.3rem;
+}
+
+.fullname {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+}
+
+.parents {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #f0f0f0;
+}
+
+/* ==== DEFAULT (Desktop on, Mobile off) ==== */
+#couple-mobile {
+    display: none;
+}
+
+/* ===== Wedding Date Section ===== */
+.wedding-date-section {
+    position: relative;
+    background: url("src/img/weddingPicture/weddingDate.webp") center / cover
+        no-repeat; /* ⬅️ ganti gambarnya */
+    color: #fff;
+    padding: clamp(64px, 10vh, 120px) 6vw;
+    overflow: hidden;
+}
+.wd-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4); /* overlay gelap 0.4 */
+    z-index: 1;
+}
+.wd-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    text-align: center;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+.wd-title {
+    font-family: "Playwrite CA", cursive;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    letter-spacing: 0.5px;
+    color: var(--gold);
+}
+
+/* Countdown */
+.wd-countdown {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8rem;
+    margin: 0.25rem 0 1rem;
+}
+.cd-item {
+    background: rgba(0, 0, 0, 0.5); /* box hitam 0.5 */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    min-width: 92px;
+    padding: 0.8rem 1rem;
+    backdrop-filter: saturate(120%) blur(2px);
+}
+.cd-value {
+    display: block;
+    font-weight: 700;
+    font-size: clamp(1.4rem, 4.5vw, 2rem);
+    line-height: 1;
+}
+.cd-label {
+    display: block;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+}
+
+/* Event list (vertical) */
+.event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: min(900px, 100%);
+}
+.event-card {
+    text-align: left;
+    background: rgba(0, 0, 0, 0.5); /* box hitam 0.5 */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 1.1rem 1.25rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+.event-title {
+    margin: 0 0 0.4rem 0;
+    font-size: clamp(1.1rem, 3.5vw, 1.25rem);
+    color: #b3a162; /* emas biar nyambung sama style kamu */
+    font-family: "Patua One", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.event-date,
+.event-time,
+.event-location {
+    margin: 0.1rem 0;
+    font-size: clamp(0.95rem, 2.6vw, 1rem);
+    color: #f5f5f5;
+}
+.event-location {
+    opacity: 0.95;
+}
+
+/* Maps button */
+.btn-map {
+    display: inline-block;
+    margin-top: 0.4rem;
+    padding: 0.8rem 1.25rem;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    background: #b3a162;
+    color: #101010;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-map:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+}
+.btn-map:active {
+    transform: translateY(0);
+}
+
+/* Ukuran font – versi sederhana */
+.event-card .event-title {
+    font-size: 2rem;
+}
+.event-card .event-date,
+.event-card .event-time,
+.event-card .event-location {
+    font-size: 1rem;
+}
+
+@media (min-width: 240px) and (max-width: 420px) {
+    .title-omShanti {
+        font-size: 1.3rem;
+    }
+}
+
+/* Responsif kecil */
+@media (max-width: 480px) {
+    .cd-item {
+        min-width: 82px;
+        padding: 0.7rem 0.9rem;
+    }
+    .wd-countdown {
+        display: flex;
+        flex-wrap: nowrap; /* ⬅️ jangan dibungkus ke baris baru */
+        justify-content: space-between;
+        gap: 0.5rem;
+        width: 100%;
+    }
+    .wd-countdown .cd-item {
+        flex: 1 1 0; /* ⬅️ bagi rata lebar 4 box */
+        min-width: 0; /* biar gak maksa melebar */
+        padding: 0.6rem 0.4rem; /* kecilkan padding */
+    }
+    .wd-countdown .cd-value {
+        font-size: clamp(1rem, 8vw, 1.3rem); /* kecilkan angka */
+        line-height: 1;
+    }
+    .wd-countdown .cd-label {
+        font-size: 0.7rem;
+        white-space: nowrap; /* "Seconds" tetap 1 baris */
+        letter-spacing: 0.3px;
+    }
+
+    .simply-countdown {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        gap: 0.5rem;
+        width: 100%;
+    }
+    .simply-countdown > .simply-section {
+        flex: 1 1 0;
+        min-width: 0;
+        padding: 0.6rem 0.4rem;
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+    }
+    .simply-countdown .simply-amount {
+        font-weight: 700;
+        font-size: clamp(1rem, 8vw, 1.3rem);
+        line-height: 1;
+    }
+    .simply-countdown .simply-word {
+        font-size: 0.7rem;
+        white-space: nowrap;
+        letter-spacing: 0.3px;
+    }
+
+    .wedding-date-section {
+        background-position: 30% 30%;
+    }
+
+    .lb-btn {
+        width: 40px;
+        height: 40px;
+    }
+    .lb-close {
+        top: 12px;
+        right: 12px;
+    }
+    .lb-prev {
+        left: 10px;
+    }
+    .lb-next {
+        right: 10px;
+    }
+}
+
+.lb-hint {
+    display: none;
+    margin-top: 0.35rem;
+    font-size: 0.9rem;
+    color: #cccccc;
+    text-align: center;
+    opacity: 0.9;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.lb-hint.off {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* ===== Section background (gelap merata) ===== */
+.rsvp-section {
+    position: relative;
+    background-image: url("src/img/weddingPicture/bgRsvp.webp"); /* ⬅️ ganti path */
+    background-size: cover;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-color: rgba(0, 0, 0, 0.45); /* gelapkan keseluruhan */
+    background-blend-mode: multiply;
+    color: #fff;
+    padding: clamp(56px, 10vh, 100px) 6vw;
+}
+
+/* Container & heading */
+.rsvp-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+.rsvp-header {
+    text-align: center;
+    margin-bottom: 1.25rem;
+}
+.rsvp-title {
+    font-family: "Playwrite CA", cursive;
+    font-size: clamp(2rem, 4.5vw, 2.6rem);
+    color: var(--gold);
+}
+
+/* Form card */
+.rsvp-form {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: clamp(16px, 3.5vw, 28px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+/* Pastikan teks pilihan di popup dropdown terbaca */
+.rsvp-form select {
+    color: #fff;
+} /* teks di control */
+.rsvp-form select option {
+    color: #111; /* teks di popup */
+    background-color: #fff; /* latar popup */
+}
+
+/* Placeholder/disabled option lebih pudar */
+.rsvp-form select option:disabled {
+    color: #888;
+}
+
+/* Grid fields: desktop 2 kolom, mobile 1 kolom */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.form-field--full {
+    grid-column: 1 / -1;
+}
+
+.form-field label {
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+    width: 100%;
+    padding: 0.85rem 0.95rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease,
+        background 0.15s ease;
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+    border-color: rgba(179, 161, 98, 0.7); /* #b3a162 */
+    box-shadow: 0 0 0 3px rgba(179, 161, 98, 0.25);
+    background: rgba(255, 255, 255, 0.09);
+}
+
+/* Actions */
+.form-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+.btn-submit {
+    appearance: none;
+    border: 0;
+    cursor: pointer;
+    background: #b3a162;
+    color: #101010;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    padding: 0.9rem 1.4rem;
+    border-radius: 999px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    margin-top: 20px;
+}
+.btn-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+}
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+/* ==== Wishes Section Height Override ==== */
+#wishes-wall,
+.wishes-section {
+    height: auto !important; /* penting: gagalkan height:100svh universal */
+    min-height: 50svh; /* setengah layar menggunakan svh */
+    min-height: 50dvh; /* fallback modern (dynamic viewport) */
+    padding-block: clamp(16px, 4vh, 24px);
+}
+
+/* Heading */
+.wishes-title {
+    text-align: center;
+    margin: 0 0 0.8rem;
+    color: #fff;
+}
+
+/* Grid: desktop 2 kolom, mobile 1 kolom */
+.wishes-list {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (max-width: 768px) {
+    .wishes-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Kartu wish (pakai gaya yang sudah kamu punya; ini contoh ringkas) */
+.wish-card {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 12px 14px;
+}
+.wish-name {
+    font-weight: 700;
+    color: #b3a162;
+    margin-bottom: 4px;
+}
+.wish-msg {
+    color: #f5f5f5;
+    white-space: pre-wrap;
+}
+
+/* Pagination */
+.wishes-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 12px;
+}
+.w-btn {
+    appearance: none;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    padding: 0.5rem 0.8rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s ease, opacity 0.15s ease;
+}
+.w-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.w-page {
+    opacity: 0.9;
+    min-width: 4ch;
+    text-align: center;
+}
+
+/* === Floating Toast === */
+#toast-root {
+    position: fixed;
+    left: 50%;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    transform: translateX(-50%) translateY(10px);
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+#toast-root.on {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+#toast-root .toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-left: 3px solid currentColor;
+    padding: 0.65rem 0.9rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+    max-width: min(92vw, 520px);
+    backdrop-filter: blur(4px) saturate(120%);
+    pointer-events: none;
+}
+
+/* Variasi warna */
+#toast-root .toast.info {
+    color: #b3a162;
+} /* emas */
+#toast-root .toast.success {
+    color: #7ed9a7;
+}
+#toast-root .toast.error {
+    color: #ff8b8b;
+}
+
+/* Icon + spinner */
+.toast .t-icon {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    position: relative;
+    flex: 0 0 18px;
+}
+/* Spinner jika loading */
+.toast.loading .t-icon {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.toast .t-msg {
+    line-height: 1.25;
+}
+.toast .t-close {
+    margin-left: 0.5rem;
+    background: transparent;
+    border: 0;
+    color: #fff;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.9;
+}
+.toast .t-close:hover {
+    opacity: 1;
+}
+
+/* ===== Wedding Gift Section ===== */
+.gift-section {
+    position: relative;
+    /* Background image + gelap merata */
+    background-image: url("src/img/weddingPicture/bgGift.webp"); /* ⬅️ ganti path */
+    background-size: cover;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-color: rgba(0, 0, 0, 0.45);
+    background-blend-mode: multiply;
+
+    color: #fff;
+    padding: clamp(44px, 8vh, 80px) 6vw;
+
+    /* tidak full screen, cukup separo-ish */
+    min-height: 42svh; /* kira-kira setengah layar */
+}
+
+.gift-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.gift-title {
+    text-align: center;
+    font-family: "Playwrite CA", cursive;
+    font-size: clamp(2rem, 4.5vw, 2.6rem);
+    color: var(--gold);
+}
+
+.gift-text {
+    text-align: justify;
+    margin-bottom: 1rem;
+    color: #f0f0f0;
+    font-size: clamp(0.8rem, 2.5vw, 1rem);
+    line-height: 1.6;
+}
+
+/* Kartu (mirip RSVP) */
+.gift-card {
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: clamp(16px, 3.2vw, 28px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    max-width: 560px;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 0.75rem;
+}
+
+.gift-logo {
+    width: 180px;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.25));
+}
+
+.gift-acc {
+    text-align: center;
+}
+.acc-number {
+    font-size: clamp(1.25rem, 3.5vw, 1.6rem);
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+.acc-name {
+    margin-top: 0.15rem;
+    color: #f0f0f0;
+    opacity: 0.95;
+}
+
+/* Tombol copy (selaras style RSVP) */
+.btn-copy {
+    appearance: none;
+    border: 0;
+    cursor: pointer;
+    background: #b3a162;
+    color: #101010;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    padding: 0.8rem 1.2rem;
+    border-radius: 999px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-copy:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+}
+
+/* Responsif mobile: fokus background & spasi */
+@media (max-width: 768px) {
+    .gift-section {
+        background-position: 50% 50%;
+    } /* geser fokus kalau perlu */
+    .gift-card {
+        gap: 0.6rem;
+    }
+    .gift-logo {
+        width: 108px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wishes-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== Responsive (Mobile) ===== */
+@media (max-width: 768px) {
+    .rsvp-section {
+        background-position: 40% 40%;
+    } /* geser fokus foto kalau perlu */
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    .btn-submit {
+        width: 100%;
+    }
+}
+
+/* ==== MOBILE LAYOUT ==== */
+@media (max-width: 768px) {
+    /* Sembunyikan versi desktop */
+    .couple-section {
+        display: none;
+    }
+
+    /* Tampilkan versi mobile */
+    #couple-mobile {
+        display: block;
+    }
+
+    .couple-mobile {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        font-family: "Patua One", serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    .mobile-person {
+        position: relative;
+        /* tinggi layar penuh; pakai dvh utk browser mobile modern dengan fallback */
+        min-height: 100vh;
+        min-height: 100dvh;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+
+        display: flex;
+        align-items: flex-end; /* teks di bawah */
+        isolation: isolate; /* pastikan overlay di bawah teks */
+    }
+
+    /* Ganti path gambar sesuai file kamu */
+    .mobile-person.groom {
+        background-image: url("src/img/weddingPicture/groomMobile.webp");
+    }
+    .mobile-person.bride {
+        background-image: url("src/img/weddingPicture/brideMobile.webp");
+    }
+
+    /* Overlay gradasi dari bawah supaya teks kebaca */
+    .mobile-person .mobile-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.85) 0%,
+            rgba(0, 0, 0, 0.45) 40%,
+            rgba(0, 0, 0, 0) 70%
+        );
+        z-index: 1;
+    }
+    .wedding-date-section {
+        background-position: 30% 30%;
+    }
+
+    /* Kontainer teks di bagian bawah */
+    .mobile-text {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        padding: 0 7vw calc(7vh + env(safe-area-inset-bottom));
+        text-align: center;
+        color: #fff;
+    }
+
+    /* Reuse kelas teks kamu, tapi kecilkan untuk mobile */
+    .nickname {
+        font-size: 2.5rem; /* dari 2.8rem -> 2.1rem */
+        margin-bottom: 0.4rem;
+        /* warna emas tetap */
+    }
+    .fullname {
+        font-size: 1.5rem; /* dari 1.3rem -> 1.05rem */
+        margin-bottom: 0.8rem;
+    }
+    .parents {
+        font-size: 1.3rem;
+        line-height: 1.55;
+        color: #f5f5f5;
+    }
+
+    .lightbox {
+        touch-action: pan-y;
+    } /* izinkan geser vertikal alami; horizontal kita handle sendiri */
+    .lb-img {
+        max-width: 96vw;
+        max-height: 80dvh; /* kasih napas buat caption & tombol */
+    }
+    .lb-caption {
+        font-size: 0.9rem;
+        padding: 0 0.75rem;
+        max-width: 96vw;
+    }
+    .lb-btn {
+        width: 44px;
+        height: 44px;
+    }
+    .lb-prev {
+        left: 6px;
+    }
+    .lb-next {
+        right: 6px;
+    }
+    .lb-close {
+        top: 10px;
+        right: 10px;
+    }
+
+    .lb-prev,
+    .lb-next {
+        display: none !important;
+    }
+    .lb-hint {
+        display: block;
+        padding: 0 0.75rem calc(env(safe-area-inset-bottom) + 0.25rem);
+    }
+    .lightbox {
+        display: flex !important; /* override dari grid */
+        flex-direction: column;
+        justify-content: center; /* ⬅️ vertikal center */
+        align-items: center; /* ⬅️ horizontal center */
+        gap: 0.5rem;
+        padding: env(safe-area-inset-top) 12px
+            calc(env(safe-area-inset-bottom) + 12px);
+    }
+
+    /* Biar proporsional dan tidak “mentok” ke atas */
+    .lb-img {
+        max-width: 96vw;
+        max-height: 80dvh; /* sisakan ruang untuk caption/hint */
+        object-fit: contain; /* pastikan landscape muat */
+    }
+
+    .lb-caption,
+    .lb-hint {
+        max-width: 96vw;
+        text-align: center;
+        margin: 0; /* hilangkan margin atas default jika ada */
+    }
+}
+
+/* 📱 Mobile & Tablet View */
+@media (max-width: 768px) {
+    .doa-ornaments .ornament {
+        position: absolute;
+        width: 100px; /* 🔧 ubah sesuai kebutuhan desktop */
+        opacity: 0.8;
+    }
+    .doa-ornaments .bottom-left {
+        bottom: -45px;
+        left: -45px;
+    }
+
+    .doa-ornaments .bottom-right {
+        bottom: -45px;
+        right: -45px;
+    }
+}
+
+/* 📱 Mobile & Tablet */
+@media (max-width: 1024px) {
+    section {
+        min-height: 100svh; /* pastikan tetap penuh layar saat UI bar muncul */
+        padding: 0;
+    }
+}
+
+/* 💻 Desktop */
+@media (min-width: 1025px) {
+    section {
+        min-height: 100vh; /* stabil di laptop/PC */
+    }
+}
+
+/* Perkecil di layar kecil */
+@media (max-width: 576px) {
+    html {
+        font-size: 80%;
+    }
+    .timeline li .timeline-image {
+        width: 120px;
+        height: 120px;
+    }
+
+    .timeline li .timeline-panel {
+        width: 55%;
+        transform: translateX(-15px);
+    }
+
+    .timeline li .timeline-panel::before {
+        top: 30px;
+    }
+
+    .timeline li .timeline-panel::after {
+        top: 31px;
+    }
+    .img-swastika {
+        width: 60%;
+    }
+}
+
+/* Home */
+.home {
+    background-color: rgba(191, 154, 47, 0.2);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding-top: 4rem;
+    padding-bottom: 5rem;
+    scroll-margin-top: 0;
+    position: relative; /* anchor untuk wave */
+}
+
+.wave-top {
+    position: absolute;
+    left: 0;
+    top: -1px; /* nempel ke hero, hilangkan garis */
+    width: 100%;
+    height: 90px; /* atur tinggi gelombang */
+    display: block;
+    transform: rotate(180deg); /* flip ke atas (bisa ganti scaleY(-1)) */
+    pointer-events: none; /* biar gak ganggu klik */
+    z-index: 1;
+}
+
+.img-omswastyastu {
+    width: 40%;
+    max-width: 300px;
+    height: auto;
+    margin-bottom: 1rem;
+    filter: invert(63%) sepia(49%) saturate(327%) hue-rotate(10deg)
+        brightness(93%) contrast(87%);
+}
+
+.photo-frame {
+    width: 200px;
+    height: 280px;
+    border-radius: 50% / 60%; /* bentuk oval vertikal */
+    overflow: hidden; /* wajib: biar gambar ke-clip */
+    border: 4px solid #b3a162; /* gold frame */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* isi penuh area, potong otomatis */
+    display: block; /* hilangkan celah inline */
+}
+
+@media (min-width: 999px) and (max-width: 1400px) {
+    .photo-frame {
+        width: 150px;
+        height: 260px;
+        border-radius: 50% / 60%; /* bentuk oval vertikal */
+        overflow: hidden; /* wajib: biar gambar ke-clip */
+        border: 4px solid #b3a162; /* gold frame */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .photo-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* isi penuh area, potong otomatis */
+        display: block; /* hilangkan celah inline */
+    }
+}
+
+@media (max-width: 768px) {
+    .photo-frame {
+        width: 110px;
+        height: 140px;
+        border-radius: 50% / 60%; /* bentuk oval vertikal */
+        overflow: hidden; /* wajib: biar gambar ke-clip */
+        border: 4px solid #b3a162; /* gold frame */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .photo-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* isi penuh area, potong otomatis */
+        display: block; /* hilangkan celah inline */
+    }
+    .woman {
+        margin-top: 32px;
+        margin-left: 24px;
+    }
+}
+
+.home h2,
+.story h2 {
+    font-family: "Playwrite CA", cursive;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--gold);
+    margin-bottom: 1rem;
+}
+
+.home h4 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+}
+
+.home p {
+    font-size: 1.2rem;
+}
+
+/* Couple Section */
+.home .couple {
+    margin-top: 20px;
+}
+
+.home .couple h3 {
+    font-family: "Playwrite CA", cursive;
+    font-size: 2rem;
+    color: var(--gold);
+}
+
+.home .couple img {
+    width: 100%;
+}
+
+.home .heart {
+    width: 50px;
+    height: 50px;
+    background-color: #fff;
+    display: flex;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-70%) translateY(90px) !important;
+    z-index: 99;
+}
+
+.home .heart i {
+    margin: auto;
+    color: var(--gold);
+}
+
+/* Story */
+.story {
+    padding-top: 3rem;
+    padding-bottom: 8rem;
+}
+
+.story span {
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.story p {
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+
+.timeline {
+    list-style: none;
+    padding: 1.4rem 0;
+    margin-top: 1rem;
+    position: relative;
+}
+
+.timeline::before {
+    content: "";
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    width: 1px;
+    background-color: #ccc;
+    left: 50%;
+}
+
+.timeline li {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.timeline li::before,
+.timeline li::after {
+    content: "";
+    display: table;
+}
+
+.timeline li::after {
+    clear: both;
+}
+
+.timeline li .timeline-image {
+    width: 160px;
+    height: 160px;
+    background-color: #ccc;
+    position: absolute;
+    left: 50%;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.timeline li .timeline-panel {
+    width: 40%;
+    float: left;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 2rem;
+    position: relative;
+    border-radius: 5px;
+}
+
+.timeline li .timeline-panel::before {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    top: 70px;
+    right: -15px;
+    z-index: -1;
+    border-top: 15px solid transparent;
+    border-left: 15px solid black;
+    border-right: 0px solid black;
+    border-bottom: 15px solid transparent;
+}
+
+.timeline li .timeline-panel::after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    border-top: 14px solid transparent;
+    border-left: 14px solid #fff;
+    border-right: 0px solid #fff;
+    border-bottom: 14px solid transparent;
+    top: 71px;
+    right: -14px;
+}
+
+.timeline li.timeline-inverted .timeline-panel {
+    float: right;
+}
+
+.timeline li.timeline-inverted .timeline-panel::before {
+    border-left-width: 0px;
+    border-right-width: 15px;
+    left: -15px;
+    right: auto;
+}
+
+.timeline li.timeline-inverted .timeline-panel::after {
+    border-left-width: 0px;
+    border-right-width: 14px;
+    left: -13px;
+    right: auto;
+}
+
+/* ===== Closing Section ===== */
+.closing {
+    /* Ganti ke gambar kamu */
+    --bg: url("src/img/weddingPicture/endSection.webp");
+
+    position: relative;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #fff;
+    background-image: var(--bg);
+    background-size: cover;
+    background-position: 50% 35%;
+    overflow: hidden; /* jaga pseudo-element */
+}
+
+/* veil halus biar teks selalu kebaca */
+.closing::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 0;
+}
+
+/* gradient bawah yang menyatu ke footer hitam */
+.closing::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 35vh; /* atur sesuai selera / tinggi footer */
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.6) 60%,
+        #000 100%
+    );
+    z-index: 0;
+}
+
+.closing .safe-area,
+.closing__inner {
+    position: relative;
+    z-index: 1; /* di atas overlay */
+}
+
+.closing__quote {
+    margin: 0 auto 18px;
+    max-width: 920px;
+    padding: 0 12px;
+    text-align: justify;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.6;
+    font-weight: 600;
+    font-size: clamp(16px, 2.4vw, 22px);
+}
+
+.closing__names {
+    margin: 0;
+    font-weight: 700;
+    font-size: clamp(22px, 3vw, 36px);
+    text-align: center;
+    font-family: "Playwrite CA", cursive;
+}
+
+.closing__icon {
+    display: inline-block;
+    width: 42px;
+    height: 42px;
+    margin-left: 8px;
+    background: center / contain no-repeat;
+    color: #fff;
+    /* taruh icon kamu di sini: */
+    background-image: url("src/img/assets/like.png");
+    filter: brightness(0) invert(1); /* hitam → putih */
+    vertical-align: middle;
+}
+
+@media (max-width: 480px) {
+    .closing {
+        min-height: 60vh;
+    }
+    .closing__icon {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+/* Laptop */
+@media (max-width: 992px) {
+    html {
+        font-size: 90%;
+    }
+    .home .heart {
+        display: none;
+    }
+    .timeline::before {
+        left: 60px;
+    }
+    .timeline li .timeline-image {
+        left: 15px;
+        margin-left: 45px;
+        top: 16px;
+    }
+    .timeline li .timeline-panel {
+        width: calc((100% - 200px));
+        float: right;
+    }
+
+    .timeline li .timeline-panel::before {
+        border-left-width: 0;
+        border-right-width: 15px;
+        left: -15px;
+        right: auto;
+    }
+
+    .timeline li .timeline-panel::after {
+        border-left-width: 0;
+        border-right-width: 14px;
+        left: -13px;
+        right: auto;
+    }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+    html {
+        font-size: 85%;
+    }
+    .timeline li .timeline-image {
+        width: 160px;
+        height: 160px;
+    }
+
+    .rsvp .button-send {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+@media (max-width: 992px) {
+    .woman {
+        margin-top: 32px;
+    }
+}
+
+/* Toast Notification */
+.toast-message {
+    position: fixed;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background-color: var(--gold);
+    color: #fff;
+    padding: 1rem 2rem;
+    border-radius: 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: all 0.5s ease;
+    z-index: 9999;
+}
+
+.toast-message.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.toast-message i {
+    color: #fff;
+    font-size: 1.4rem;
+}
+
+#penutup-section {
+    position: relative;
+    height: 100vh;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    z-index: 1; /* pastikan konten ada di atas */
+}
+
+#penutup-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0.8) 60%,
+            rgba(0, 0, 0, 1) 100%
+        ),
+        url("src/img/weddingPicture/endPic.webp");
+
+    background-position: center;
+    background-size: cover;
+    z-index: -1; /* ini kuncinya */
+}
+
+/* ===== Footer ===== */
+.site-footer {
+    background: #000; /* nyambung dengan gradient closing */
+    color: #bbb;
+    padding: 28px 0 36px;
+    margin-top: -1px; /* hindari hairline di beberapa device */
+}
+
+.footer__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+}
+
+.footer__copy {
+    margin: 0;
+    font-size: clamp(14px, 1.8vw, 15px);
+    letter-spacing: 0.02em;
+    opacity: 0.95;
+}
+
+.footer__copy i {
+    margin: 0 0.35em;
+    font-size: 0.95em;
+    opacity: 0.9;
+    vertical-align: middle;
+}
+
+.footer__socials {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #bbb;
+    font-size: 20px;
+    transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+/* Hover/focus jadi emas (ambil dari var di CSS, ada fallback) */
+.social-link:is(:hover, :focus-visible) {
+    color: var(--gold, #d4af37);
+    background-color: rgba(255, 255, 255, 0.05);
+    transform: translateY(-1px);
+    outline: none;
+}
+
+@media (max-width: 480px) {
+    .social-link {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+}
+
+/* default boleh smooth */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Saat ada fokus (keyboard muncul) → jangan smooth */
+html.keyboard-open,
+html.keyboard-open body {
+    scroll-behavior: auto !important;
+}
+
+/* Kalau kamu pakai scroll-snap di global, matikan sewaktu ngetik */
+html.no-snap,
+body.no-snap {
+    scroll-snap-type: none !important;
+}
+
+.gallery-section {
+    position: relative;
+    background: url("src/img/weddingPicture/bgGallery.webp") center/cover
+        no-repeat;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.gallery-title {
+    font-family: "Playwrite CA", cursive;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    letter-spacing: 0.5px;
+    color: var(--gold);
+}
+
+.gallery-section .overlay {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 0;
+}
+
+.gallery-section .container {
+    position: relative;
+    z-index: 1;
+}
+
+/* === GRID DESKTOP === */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-auto-flow: dense;
+    gap: 10px;
+}
+
+.gallery-grid2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(250px, 1fr));
+    grid-auto-flow: dense;
+    gap: 10px;
+}
+
+/* Gaya umum gambar */
+.gallery-grid img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Gaya umum gambar */
+.gallery-grid2 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Gambar landscape lebih lebar */
+.gallery-grid img.landscape {
+    grid-column: span 2;
+}
+
+/* Gambar landscape lebih lebar */
+.gallery-grid2 img.landscape {
+    grid-column: span 2;
+}
+
+/* === RESPONSIVE: MOBILE 2 COLUMN === */
+@media (max-width: 768px) {
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gallery-grid img.landscape {
+        grid-column: span 1; /* reset agar landscape tetap sejajar */
+    }
+    .gallery-grid2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gallery-grid2 img.landscape {
+        grid-column: span 1; /* reset agar landscape tetap sejajar */
+    }
+}
+
+/* ===== Lightbox (lebih ringan & smooth) ===== */
+.lb {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.85);
+    display: block; /* tetap ada di DOM */
+    opacity: 0; /* disembunyikan via opacity */
+    pointer-events: none; /* non-interaktif saat tersembunyi */
+    transition: opacity 0.25s ease;
+    padding: 24px;
+}
+.lb.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.no-scroll {
+    overflow: hidden;
+}
+
+/* Panggung gambar di tengah layar */
+.lb-stage {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    max-width: 96vw;
+    max-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0;
+    flex-direction: column;
+}
+
+#lb-image {
+    max-width: 96vw;
+    max-height: 86vh;
+    width: auto;
+    height: auto;
+    object-fit: contain; /* pastikan landscape/portrait tetap proporsional */
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    user-select: none;
+    -webkit-user-drag: none;
+    touch-action: pan-y; /* geser vertikal aman, horizontal kita deteksi manual */
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    will-change: opacity;
+}
+.lb.show #lb-image.is-ready {
+    opacity: 1;
+}
+
+/* Tombol bertema gold — FIXED posisi */
+.lb-btn {
+    position: fixed;
+    z-index: 2100;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    background: rgba(0, 0, 0, 0.35);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    font-size: 28px;
+    line-height: 1;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.15s ease,
+        opacity 0.2s ease;
+    outline: none;
+}
+.lb-btn:hover,
+.lb-btn:focus-visible {
+    background: rgba(0, 0, 0, 0.55);
+}
+
+/* X fixed kanan-atas */
+.lb-close {
+    top: 16px;
+    right: 16px;
+}
+
+/* Panah fixed tengah kiri/kanan */
+.lb-prev {
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.lb-next {
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Jaga aksesibilitas & ergonomi di layar kecil */
+@media (max-width: 768px) {
+    .lb-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 24px;
+    }
+}
+
+/* Catatan kaki hanya mobile */
+.lb-footnote {
+    font-size: 0.9rem;
+    color: var(--gold);
+    opacity: 0.95;
+    text-align: center;
+    display: none;
+}
+@media (max-width: 768px) {
+    .lb-footnote {
+        display: block;
+    }
+}
+
+/* Kurangi animasi untuk user yang sensitif terhadap motion */
+@media (prefers-reduced-motion: reduce) {
+    .lb,
+    #lb-image {
+        transition: none;
+    }
+}
+
+/* Tahan overscroll chain waktu ngetik di RSVP */
+#rsvp {
+    overscroll-behavior: contain;
+}
+
+/* Hindari auto-zoom iOS saat fokus */
+#rsvp input,
+#rsvp select,
+#rsvp textarea {
+    font-size: 16px;
+}
+
+/* Gunakan dvh agar section full-screen nggak ‘melompat’ saat keyboard muncul */
+@supports (height: 100dvh) {
+    /* ganti selector berikut ke section full-screen milikmu */
+    #wedding-title,
+    .couple-section {
+        height: 100dvh;
+    }
+}
+
+/* Music */
+.music-btn {
+    position: fixed;
+    right: 14px;
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    z-index: 9999;
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: #b3a162; /* gold */
+    color: #101010;
+    border: none;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    opacity: 0.7;
+    display: none;
+}
+.music-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+}
+.music-btn:active {
+    transform: translateY(0);
+}
+@media (max-width: 768px) {
+    .music-btn {
+        width: 44px;
+        height: 44px;
+        right: 10px;
+        bottom: calc(10px + env(safe-area-inset-bottom));
+    }
+}
+@media print {
+    .music-btn {
+        display: none;
+    }
+}
+
+.music-btn.is-visible {
+    display: grid;
+}
